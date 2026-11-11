@@ -29,7 +29,8 @@ Implement the strategy documented in `docs/strategy_blueprint.md` as a testable,
 - Make session boundaries, holidays, daylight-saving changes, tick size, contract multiplier and fees configurable and tested.
 - Log decisions with timestamp, market context, state, trigger and rejection reason. Never log secrets.
 - Do not fabricate Level 2 / MBO data from ordinary OHLCV bars. Clearly label data fidelity.
-- Keep strategy parameters in `config/trading_params.yaml`; validate them at startup.
+- Keep strategy parameters in `config/trading_params.yaml`; load them through `src/fawio_orderflow/config_loader.py` and validate with Pydantic v2 at startup.
+- YAML commission fields are `commission_per_side`; convert to round-trip commission exactly once when creating `InstrumentSpec`. Risk calculations must include full round-trip fees.
 
 ## Required workflow
 1. Inspect the existing code and tests before editing. Preserve the established `src/fawio_orderflow/` package structure.
