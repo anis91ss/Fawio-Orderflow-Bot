@@ -8,11 +8,11 @@ instruments:
   NQ:
     tick_size: 0.25
     tick_value: 5.00
-    commission_per_contract: 2.05
+    commission_per_side: 2.05
   MNQ:
     tick_size: 0.25
     tick_value: 0.50
-    commission_per_contract: 0.62
+    commission_per_side: 0.62
 
 sessions:
   new_york:
