@@ -5,11 +5,11 @@ from fawio_orderflow.strategy import FabioScalpEngine
 
 
 def nq():
-    return InstrumentSpec("NQ", Decimal("0.25"), Decimal("5.00"), Decimal("2.05"))
+    return InstrumentSpec("NQ", Decimal("0.25"), Decimal("5.00"), Decimal("4.10"))
 
 
 def mnq():
-    return InstrumentSpec("MNQ", Decimal("0.25"), Decimal("0.50"), Decimal("0.62"))
+    return InstrumentSpec("MNQ", Decimal("0.25"), Decimal("0.50"), Decimal("1.24"))
 
 
 def test_tight_orderflow_stop_nq():
@@ -19,7 +19,7 @@ def test_tight_orderflow_stop_nq():
     assert result.is_valid and result.stop_type == StopType.ORDERFLOW_TIGHT
     assert result.stop_price == Decimal("20998.75")
     assert result.ticks_distance == 5
-    assert result.risk_dollars == Decimal("27.05")
+    assert result.risk_dollars == Decimal("29.10")
 
 
 def test_structural_reference_stop_mnq():
@@ -29,7 +29,7 @@ def test_structural_reference_stop_mnq():
     assert result.is_valid and result.stop_type == StopType.STRUCTURAL_REFERENCE
     assert result.stop_price == Decimal("20998.00")
     assert result.ticks_distance == 8
-    assert result.risk_dollars == Decimal("4.62")
+    assert result.risk_dollars == Decimal("5.24")
 
 
 def test_volatility_switches_to_structural():
