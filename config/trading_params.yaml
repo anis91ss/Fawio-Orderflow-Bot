@@ -1,0 +1,87 @@
+# Contract specifications and strategy hypotheses; fees are estimates to verify.
+instrument:
+  symbols: [NQ, MNQ]
+  tick_size_reference: 0.25
+  mnq_block_threshold: null
+
+instruments:
+  NQ:
+    tick_size: 0.25
+    tick_value: 5.00
+    commission_per_side: 2.05
+  MNQ:
+    tick_size: 0.25
+    tick_value: 0.50
+    commission_per_side: 0.62
+
+sessions:
+  new_york:
+    source_label: "15:30-17:30 CET / 09:30-11:30 EST"
+    timezone: null
+    start: "09:30"
+    end: "11:30"
+  london:
+    enabled_for_model_b: true
+    timezone: null
+
+market_profile:
+  value_area_fraction: 0.70
+  rolling_window_minutes: 60
+  consolidation_min_minutes: 30
+  consolidation_max_minutes: 60
+  lvn_relative_volume_below_median: 0.30
+  lvn_neighborhood_ticks: null
+  profile_method: tick_volume
+  kde_bandwidth: null
+  imbalance_volume_sigma_multiple: 1.5
+  imbalance_sigma_definition: null
+
+orderflow:
+  block_threshold_nq_contracts: 30
+  ask_sweep_min_contracts_nq: 30
+  ask_sweep_max_window_ms: 200
+  retest_lvn_tolerance_ticks: 3
+  absorption_max_price_movement_ticks: 2
+  absorption_cvd_minimum: null
+  absorption_window_ms: null
+  cvd_slope_period: 1m
+
+strategy:
+  model_a_trend_following:
+    enabled: true
+    ignore_initial_drive: true
+    require_second_drive: true
+    require_retest_at_lvn_or_value_area_edge: true
+    allowed_targets: [unfinished_auction, prior_day_virgin_poc, risk_reward]
+    risk_reward_min: 2.0
+    risk_reward_max: 3.0
+  model_b_mean_reversion:
+    enabled: true
+    require_failed_auction_close_inside_value_area: true
+    target: value_area_poc
+
+stop_loss_hypotheses:
+  tight_buffer_ticks: 3
+  structural_ref_ticks: 8
+  max_tight_distance_ticks: 6
+  volatility_threshold_ticks: 12
+  max_allowed_risk_ticks: 16
+  lvn_buffer_ticks: 2
+
+risk_management:
+  account_risk_pct: 0.0025
+  daily_max_loss_pct: 0.02
+  daily_lockout_reset_utc: "00:00"
+  per_trade_risk_fraction_min: 0.0025
+  per_trade_risk_fraction_max: 0.005
+  breakeven_trigger_r: 1.0
+  breakeven_plus_ticks: 1
+  cvd_flattening_threshold: null
+
+execution:
+  mode: simulation
+  live_trading_enabled: false
+  require_protective_order_ack: true
+  fail_closed_on_unknown_position: true
+  use_bracket_orders: true
+  use_oco: true
