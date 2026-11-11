@@ -22,7 +22,7 @@ Implement the strategy documented in `docs/strategy_blueprint.md` as a testable,
 
 ## Engineering conventions
 - Python 3.11+; type hints on public interfaces; dataclasses or Pydantic models for validated event/config types.
-- Keep data ingestion, normalization, indicators, strategy, risk, execution and persistence separate.
+- Keep data ingestion, normalization, indicators, strategy, risk, execution and persistence separate. The current adaptive risk implementation belongs in `src/fawio_orderflow/risk_manager.py`; the strategy wrapper belongs in `src/fawio_orderflow/strategy.py`. Do not create parallel top-level `src/strategy` or nested duplicate risk/strategy packages.
 - Prefer small pure functions for calculations. Keep exchange/broker I/O behind interfaces.
 - Use Decimal or integer ticks for prices and money-sensitive calculations; avoid binary-float price comparisons.
 - All timestamps must be timezone-aware. Store UTC internally and convert session schedules using an explicit exchange timezone and calendar.
@@ -32,7 +32,7 @@ Implement the strategy documented in `docs/strategy_blueprint.md` as a testable,
 - Keep strategy parameters in `config/trading_params.yaml`; validate them at startup.
 
 ## Required workflow
-1. Inspect the existing code and tests before editing.
+1. Inspect the existing code and tests before editing. Preserve the established `src/fawio_orderflow/` package structure.
 2. State a short plan for multi-file changes.
 3. Implement in small increments.
 4. Run formatting, static checks and tests; report commands and outcomes accurately.
@@ -49,3 +49,10 @@ The blueprint includes thresholds and a reference snippet, but also leaves imple
 - The stated 15:30–17:30 CET and 09:30–11:30 EST session labels need an explicit timezone/calendar implementation for daylight-saving transitions.
 
 When a decision is required, create a documented proposal and ask the user rather than silently changing the strategy.
+
+
+## Adaptive stop and position sizing implementation
+- NQ tick value is configured as $5.00 and MNQ as $0.50 for a 0.25-point tick. Commission values in YAML are estimates and must be verified for the intended per-side/round-trip convention.
+- Adaptive stop thresholds are configurable hypotheses, not verified original rules.
+- A missing qualifying risk budget for one contract must return zero contracts and an explicit `NO_TRADE_RISK_EXCEEDED` outcome. Never force a minimum contract.
+- Risk and stop calculations use Decimal; do not regress to binary-float price arithmetic.
