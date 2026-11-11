@@ -7,6 +7,7 @@ Read CLAUDE.md and docs; audit codebase; list unresolved strategy decisions.
 Acceptance: clean setup, test command, no credentials, live mode off.
 
 ## Phase 1 – Domain types and configuration
+Load `config/trading_params.yaml` through `src/fawio_orderflow/config_loader.py` using Pydantic v2. YAML fees are per-side and are converted to round-trip costs exactly once in `InstrumentSpec`. Build the engine and stop manager from validated `AppConfig`.
 Create validated config and typed events: Tick, TradeEvent, Level2Snapshot, Bar, ProfileSnapshot, Signal, Position and Order state. Use timezone-aware timestamps and integer ticks/Decimal for price-sensitive calculations.
 Acceptance: config/serialization tests; invalid data fails closed.
 
