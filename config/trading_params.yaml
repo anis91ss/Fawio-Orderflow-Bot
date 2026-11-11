@@ -1,4 +1,4 @@
-# Transcribed source values. Unspecified/conflicting rules remain null.
+# Contract specifications and strategy hypotheses; fees are estimates to verify.
 instrument:
   symbols: [NQ, MNQ]
   tick_size_reference: 0.25
@@ -8,11 +8,11 @@ instruments:
   NQ:
     tick_size: 0.25
     tick_value: 5.00
-    commission_per_contract: 2.05 # User-supplied estimate; confirm whether round-trip/all-in.
+    commission_per_contract: 2.05
   MNQ:
     tick_size: 0.25
     tick_value: 0.50
-    commission_per_contract: 0.62 # User-supplied estimate; confirm whether round-trip/all-in.
+    commission_per_contract: 0.62
 
 sessions:
   new_york:
