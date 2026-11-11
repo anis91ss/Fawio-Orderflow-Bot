@@ -2,7 +2,10 @@
 from dataclasses import dataclass
 from decimal import Decimal, ROUND_HALF_UP
 from enum import Enum
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from fawio_orderflow.config_loader import AppConfig
 
 
 def _decimal(value: Decimal | str | int | float) -> Decimal:
@@ -40,6 +43,17 @@ class StopLossResult:
 
 
 class AdaptiveStopLossManager:
+    @classmethod
+    def from_config(cls, config: "AppConfig", symbol: str) -> "AdaptiveStopLossManager":
+        hypotheses = config.stop_loss_hypotheses
+        return cls(instrument=config.get_instrument_spec(symbol),
+                   tight_buffer_ticks=hypotheses.tight_buffer_ticks,
+                   structural_ref_ticks=hypotheses.structural_ref_ticks,
+                   max_tight_distance_ticks=hypotheses.max_tight_distance_ticks,
+                   volatility_threshold_ticks=hypotheses.volatility_threshold_ticks,
+                   max_allowed_risk_ticks=hypotheses.max_allowed_risk_ticks,
+                   lvn_buffer_ticks=hypotheses.lvn_buffer_ticks)
+
     def __init__(
         self,
         instrument: InstrumentSpec,
