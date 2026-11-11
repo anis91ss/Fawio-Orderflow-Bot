@@ -78,3 +78,13 @@ def test_daily_loss_guard_blocks_new_trades():
     engine.record_realized_pnl("-400", "20000")
     assert engine.is_daily_locked
     assert engine.evaluate_long_trigger("21000", "21001", "20999", None, None, "20000") is None
+
+
+def test_strategy_returns_explicit_no_trade_risk_exceeded():
+    engine = FabioScalpEngine(AdaptiveStopLossManager(nq()))
+    result = engine.evaluate_long_trigger(
+        "21000", "21000.50", "20999.50", None, None, "5000"
+    )
+    assert result is not None
+    assert result["action"] == "NO_TRADE_RISK_EXCEEDED"
+    assert result["contracts"] == 0
