@@ -67,7 +67,12 @@ class FabioScalpEngine:
             return None
         contracts = self.calculate_position_size(account_equity, stop.risk_dollars)
         if contracts == 0:
-            return None
+            return {
+                "action": "NO_TRADE_RISK_EXCEEDED",
+                "contracts": 0,
+                "risk_per_contract": stop.risk_dollars,
+                "reason": "Erlaubtes Kontorisiko reicht nicht für einen Kontrakt",
+            }
         entry = Decimal(str(entry_price))
         target = entry + reward_risk * (entry - stop.stop_price)
         return {
