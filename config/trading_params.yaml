@@ -4,6 +4,16 @@ instrument:
   tick_size_reference: 0.25
   mnq_block_threshold: null
 
+instruments:
+  NQ:
+    tick_size: 0.25
+    tick_value: 5.00
+    commission_per_contract: 2.05 # User-supplied estimate; confirm whether round-trip/all-in.
+  MNQ:
+    tick_size: 0.25
+    tick_value: 0.50
+    commission_per_contract: 0.62 # User-supplied estimate; confirm whether round-trip/all-in.
+
 sessions:
   new_york:
     source_label: "15:30-17:30 CET / 09:30-11:30 EST"
@@ -50,14 +60,20 @@ strategy:
     require_failed_auction_close_inside_value_area: true
     target: value_area_poc
 
-risk:
-  daily_drawdown_limit_fraction: 0.02
+stop_loss_hypotheses:
+  tight_buffer_ticks: 3
+  structural_ref_ticks: 8
+  max_tight_distance_ticks: 6
+  volatility_threshold_ticks: 12
+  max_allowed_risk_ticks: 16
+  lvn_buffer_ticks: 2
+
+risk_management:
+  account_risk_pct: 0.0025
+  daily_max_loss_pct: 0.02
   daily_lockout_reset_utc: "00:00"
   per_trade_risk_fraction_min: 0.0025
   per_trade_risk_fraction_max: 0.005
-  stop_ticks_narrative_min: 2
-  stop_ticks_narrative_max: 4
-  stop_ticks_reference_example: 8
   breakeven_trigger_r: 1.0
   breakeven_plus_ticks: 1
   cvd_flattening_threshold: null
